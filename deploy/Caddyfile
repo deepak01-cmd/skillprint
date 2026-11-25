@@ -1,0 +1,8 @@
+# HTTPS for Skillprint. Caddy gets and renews the certificate for DOMAIN automatically (ports 80 and 443 must be open).
+{$DOMAIN} {
+	encode zstd gzip
+	request_body {
+		max_size 130MB
+	}
+	reverse_proxy app:3000
+}

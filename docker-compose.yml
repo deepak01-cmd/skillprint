@@ -1,0 +1,35 @@
+name: role-skill-platform
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: rsip
+      POSTGRES_PASSWORD: rsip
+      POSTGRES_DB: rsip
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"          # reach it from your machine on port 5433 (psql -h localhost -p 5433 -U rsip rsip); 5433 avoids clashing with a local PostgreSQL
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rsip -d rsip"]
+      interval: 5s
+      retries: 20
+    restart: unless-stopped
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://rsip:rsip@db:5432/rsip
+      SESSION_SECRET: change-me-to-a-long-random-string-at-least-32-chars
+      COOKIE_SECURE: "false"   # set "true" only when the app is served over HTTPS
+      DEMO_MODE: "true"        # lists demo accounts on the login page
+      IMPORT_JOBS: "true"      # import .xlsx/.csv files from ./data on first start
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+volumes:
+  pgdata: {}

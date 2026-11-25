@@ -1,0 +1,60 @@
+{
+  "name": "role-skill-intelligence-platform",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:reset": "tsx scripts/migrate.ts --reset && tsx scripts/seed.ts",
+    "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "start:prod": "tsx scripts/start.ts",
+    "grow": "tsx scripts/grow.ts",
+    "generate-demo": "tsx scripts/generate-demo.ts",
+    "import-jobs": "tsx scripts/import-jobs.ts",
+    "reference:load": "tsx scripts/reference-load.ts",
+    "demo:password": "tsx scripts/set-demo-password.ts"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.14",
+    "@electric-sql/pglite-socket": "0.2.17",
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@fontsource-variable/lexend": "5.2.8",
+    "bcryptjs": "2.4.3",
+    "embedded-postgres": "16.14.0-beta.17",
+    "exceljs": "^4.4.0",
+    "jose": "5.9.6",
+    "jszip": "^3.10.2",
+    "lucide-react": "0.460.0",
+    "next": "14.2.35",
+    "node-llama-cpp": "3.22.3",
+    "nodemailer": "6.9.16",
+    "pg": "8.13.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "2.4.6",
+    "@types/node": "22.10.2",
+    "@types/nodemailer": "6.4.17",
+    "@types/pg": "8.11.10",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.17",
+    "tsx": "4.19.2",
+    "typescript": "5.6.3"
+  },
+  "overrides": {
+    "is-generator-function": "1.1.0",
+    "is-async-function": "2.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

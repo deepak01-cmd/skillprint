@@ -1,0 +1,14 @@
+node_modules
+.next
+.env
+.git
+data
+*.zip
+tests
+.pgdata
+.pglite
+models
+*.gguf
+.env.*
+backups
+deploy/demo-password.txt

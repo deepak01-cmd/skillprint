@@ -1,0 +1,14 @@
+node_modules
+.next
+.env
+*.tsbuildinfo
+next-env.d.ts
+
+data/*
+!data/README.txt
+.pgdata
+app-version.txt
+.pglite
+*.zip
+models/*
+!models/README.txt

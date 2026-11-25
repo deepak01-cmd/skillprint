@@ -1,0 +1,55 @@
+# Skillprint on a server: the app, its PostgreSQL database and Caddy (HTTPS with an automatic certificate).
+# Settings come from the .env file next to this file (deploy/setup.sh creates it). Start: docker compose -f docker-compose.prod.yml up -d --build
+name: skillprint
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: rsip
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      POSTGRES_DB: rsip
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rsip -d rsip"]
+      interval: 5s
+      retries: 30
+    restart: unless-stopped
+    # no published port: the database is reachable only by the app
+
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://rsip:${DB_PASSWORD}@db:5432/rsip
+      NODE_ENV: production
+      COOKIE_SECURE: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data        # job postings and O*NET reference files, loaded on first start
+      - ./models:/app/models    # optional .gguf AI model
+    expose:
+      - "3000"
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  pgdata: {}
+  caddy_data: {}
+  caddy_config: {}
